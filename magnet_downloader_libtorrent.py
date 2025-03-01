@@ -16,26 +16,6 @@ def download_magnet_libtorrent(magnet_link, download_dir):
         # Create a session
         session = lt.session()
 
-        # Settings - DHT off
-        settings = {
-            "dht_announce": False,
-            "dht_bootstrap_nodes": "",
-            "connection_speed": 100, # Connections per second
-            "max_connections_per_torrent": 200,
-            "max_out_request_queue_size": 500,
-            "send_buffer_low_watermark": 500,
-            "active_seeds":0, #Remove if you want to seed - Ethical consideration.
-            "active_downloads":200,
-            "download_rate_limit": 5000 #In KB, setting to 5MB
-         }
-        session.set_settings(settings)
-
-        #Encryption settings
-        session.set_settings({"prefer_rc4": True, "enable_incoming_utp": True, "enable_outgoing_utp": True, "enable_lsd": False})
-
-        #Disk cache size
-        session.set_cache_size(512) #512 MB cache
-
         # Add magnet link
         params = {
             'save_path': download_dir,
