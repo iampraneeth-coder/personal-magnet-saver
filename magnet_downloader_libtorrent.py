@@ -16,12 +16,6 @@ def download_magnet_libtorrent(magnet_link, download_dir):
         # Create a session
         session = lt.session()
 
-        # Settings - DHT off
-        settings = session.get_settings()
-        settings.dht_announce = False # Disable DHT announce
-        settings.dht_bootstrap_nodes = "" #Remove default DHT nodes
-        session.apply_settings(settings)
-
         # Add magnet link
         params = {
             'save_path': download_dir,
@@ -47,7 +41,7 @@ def download_magnet_libtorrent(magnet_link, download_dir):
                 percentage = downloaded * 100 / total  # percentage calculation
                 print(f"Progress: {percentage:.1f}%  |  Down: {get_readable_size(downloaded)}  |  Total: {get_readable_size(total)}  |  Peers: {s.num_peers}", end='\r') #Overwrite
             else:
-                 print("Metadata Downloading | DHT : OFF - Please hold...") #Still Finding Peers
+                 print("Metadata Downloading | DHT : Please hold...") #Still Finding Peers
             time.sleep(1) #Sleep for a second
 
         print(f"\nDownload complete for: {handle.name()}")
