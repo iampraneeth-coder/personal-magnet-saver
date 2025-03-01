@@ -16,6 +16,12 @@ def download_magnet_libtorrent(magnet_link, download_dir):
         # Create a session
         session = lt.session()
 
+        # Settings - DHT off
+        settings = session.get_settings()
+        settings.dht_announce = False # Disable DHT announce
+        settings.dht_bootstrap_nodes = "" #Remove default DHT nodes
+        session.apply_settings(settings)
+
         # Add magnet link
         params = {
             'save_path': download_dir,
@@ -27,9 +33,6 @@ def download_magnet_libtorrent(magnet_link, download_dir):
         print(f"Downloading to: {download_dir}")
         print(f"Magnet link: {magnet_link}")
 
-        # Start the download
-        session.start_dht() #DHT is needed for P2P to work, so enabling this first.
-
         print("\nStarting download...")
 
         # Track progress
@@ -39,9 +42,12 @@ def download_magnet_libtorrent(magnet_link, download_dir):
             downloaded = s.total_done  # Bytes downloaded
             total = s.total  # Total bytes in torrent
 
-            percentage = downloaded * 100 / total #percentage calculation
-
-            print(f"Progress: {percentage:.1f}%  |  Down: {get_readable_size(downloaded)}  |  Total: {get_readable_size(total)}  |  Peers: {s.num_peers}", end='\r') #Overwrite
+            # Check if total is zero to avoid division by zero
+            if total > 0:
+                percentage = downloaded * 100 / total  # percentage calculation
+                print(f"Progress: {percentage:.1f}%  |  Down: {get_readable_size(downloaded)}  |  Total: {get_readable_size(total)}  |  Peers: {s.num_peers}", end='\r') #Overwrite
+            else:
+                 print("Metadata Downloading | DHT : OFF - Please hold...") #Still Finding Peers
             time.sleep(1) #Sleep for a second
 
         print(f"\nDownload complete for: {handle.name()}")
