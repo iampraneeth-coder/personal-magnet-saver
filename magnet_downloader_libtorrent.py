@@ -20,7 +20,6 @@ def download_magnet_libtorrent(magnet_link, download_dir):
         params = {
             'save_path': download_dir,
             'storage_mode': lt.storage_mode_t.storage_mode_sparse, #Allocate space as needed
-            'duplicate_is_error': True #Prevent duplicate downloads
         }
 
         handle = lt.add_magnet_uri(session, magnet_link, params)
